@@ -58,7 +58,6 @@ fn main() {
     println!("answer: {}", answer);
 
     println!("=============== PART 2 ===============");
-    answer = 0;
     let mut invalid_ids: HashSet<u64> = HashSet::new();
     for range in input.trim().split(",") {
         println!("{}", range);
@@ -74,6 +73,9 @@ fn main() {
             let longest_pattern = id_str.len() / 2;
 
             for pattern_len in 1..longest_pattern + 1 {
+                if id_str.len() % pattern_len != 0 {
+                    continue;
+                }
                 let chunks = split_equal_substr(&id_str, pattern_len);
                 // println!("chunks: {:?}", chunks);
 
