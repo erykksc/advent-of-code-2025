@@ -1,2 +1,16 @@
 [tools]
 rust = "latest"
+
+[tasks.all]
+run = '''
+#!/usr/bin/env bash
+for file in src/bin/*; do 
+	# strip prefix
+	temp_name="${file##src/bin/}"
+
+	# strip suffix
+	bin_name="${temp_name%.rs}"
+
+	cargo run --bin "$bin_name";
+done
+'''
