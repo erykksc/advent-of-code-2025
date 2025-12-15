@@ -1,9 +1,9 @@
 use std::{fs, vec};
 
 fn main() {
-    let input = fs::read_to_string("inputs/day_07.txt")
+    let input = fs::read_to_string("inputs/day_07-example.txt")
         // let input = fs::read_to_string("inputs/day_07.txt")
-        .expect("Could not read input file: inputs/day_07-example.txt");
+        .expect("Could not read input file for day 7");
 
     let mut lines = input.lines();
 
