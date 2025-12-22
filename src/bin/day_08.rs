@@ -1,8 +1,5 @@
 use core::fmt;
-use std::{
-    collections::{HashMap, HashSet},
-    fs,
-};
+use std::{collections::HashMap, fs};
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 struct JunctionBox {
@@ -81,14 +78,6 @@ impl<'a> UnionFind<'a> {
             circuit.push(node);
         }
         return circuits;
-    }
-
-    fn total_circuits(&self) -> usize {
-        let mut result: HashSet<&JunctionBox> = HashSet::new();
-        for node in self.nodes() {
-            result.insert(self.find(node));
-        }
-        return result.len();
     }
 }
 
