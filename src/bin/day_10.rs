@@ -58,7 +58,7 @@ fn parse_problem(line: &str) -> Problem {
     };
 }
 
-fn solve_problem(problem: &Problem) -> i64 {
+fn solve_part_1(problem: &Problem) -> i64 {
     let target = &problem.target;
     let buttons = &problem.buttons;
 
@@ -77,7 +77,7 @@ fn solve_problem(problem: &Problem) -> i64 {
             for b in &state {
                 print!("{}", if *b { '#' } else { '.' })
             }
-            println!("");
+            print!("\r");
 
             for button in buttons {
                 let mut new_state = state.clone();
@@ -89,7 +89,55 @@ fn solve_problem(problem: &Problem) -> i64 {
                     new_unvisited.push(new_state.clone());
                 };
                 if new_state == *target {
-                    println!("Part answer: {}", depth);
+                    println!("\nPart answer for part 1: {}", depth);
+                    return depth;
+                };
+            }
+        }
+        unvisited = new_unvisited;
+    }
+    panic!("Unsolvable riddle");
+}
+
+fn solve_part_2(problem: &Problem) -> i64 {
+    let buttons = &problem.buttons;
+    let joltage = &problem.joltage;
+
+    let mut unvisited: Vec<Vec<i64>> = vec![vec![0; joltage.len()]];
+    let mut visited: HashSet<Vec<i64>> = HashSet::new();
+    let mut depth: i64 = 0;
+
+    while unvisited.len() > 0 {
+        depth += 1;
+        let mut new_unvisited: Vec<Vec<i64>> = vec![vec![0; joltage.len()]];
+
+        for state in unvisited {
+            visited.insert(state.clone());
+
+            print!("Entering new state: ");
+            for b in &state {
+                print!("{},", b)
+            }
+            print!("\r");
+
+            'outer: for button in buttons {
+                let mut new_state = state.clone();
+                for num in button {
+                    new_state[*num] += 1;
+                }
+
+                // check if new_state is above the target
+                for i in 0..joltage.len() {
+                    if joltage[i] < new_state[i] {
+                        continue 'outer;
+                    }
+                }
+
+                if !visited.contains(&new_state) {
+                    new_unvisited.push(new_state.clone());
+                };
+                if new_state == *joltage {
+                    println!("\nPart answer for part 2: {}", depth);
                     return depth;
                 };
             }
@@ -104,6 +152,7 @@ fn main() {
         fs::read_to_string("inputs/day_10.txt").expect("Should be able to read the input file");
 
     let mut answer = 0;
+    let mut answer_part2 = 0;
 
     for line in input.trim().lines() {
         println!("Parsing line: {}", line);
@@ -114,8 +163,10 @@ fn main() {
 
         let problem = parse_problem(tline);
 
-        answer += solve_problem(&problem);
+        answer += solve_part_1(&problem);
+        answer_part2 += solve_part_2(&problem);
     }
 
-    println!("Part 1 answer: {}", answer)
+    println!("Part 1 answer: {}", answer);
+    println!("Part 2 answer: {}", answer_part2);
 }
